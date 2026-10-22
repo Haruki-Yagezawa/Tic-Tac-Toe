@@ -12,13 +12,17 @@ namespace BoardSurface
     {
         [Header("BoardSurfaceInputBase関連")]
         [SerializeField]
-        protected InGameManager _gameManager;
+        private InGameManager _gameManager;
 
         private ReactiveProperty<EnumInputType> _inputType;
 
         private void Awake()
         {
             OnSubscribe();
+        }
+        private void OnDestroy()
+        {
+            OnDispose();
         }
 
         /// <summary>
@@ -51,6 +55,10 @@ namespace BoardSurface
                 }
             }).AddTo(this);
         }
+        virtual protected void OnDispose()
+        {
+
+        }
 
         //==================================================================
         // 押した内容（継承先で呼び出す）
@@ -73,6 +81,10 @@ namespace BoardSurface
         protected void OnPush_Select()
         {
             _inputType.Value = EnumInputType.Select;
+        }
+        protected void OnPush_PieceTypeChange()
+        {
+            _inputType.Value = EnumInputType.PieceTypeChange;
         }
 
         //==================================================================
