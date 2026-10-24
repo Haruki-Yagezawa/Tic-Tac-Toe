@@ -15,6 +15,8 @@ namespace BoardSurface
         private InGameManager _gameManager;
         [SerializeField]
         private BoardSurfaceManager_Selector _selector;
+        [SerializeField]
+        private BoardSurfaceManager_View _view;
 
         private BoardSurfaceStateData _boardData = new();
         private BoardSurfacePlayerStateData[] _playerData = new BoardSurfacePlayerStateData[2];
@@ -27,26 +29,45 @@ namespace BoardSurface
         {
             _playerData[0] = new BoardSurfacePlayerStateData(EnumTileState.PlacedCircle);
             _playerData[1] = new BoardSurfacePlayerStateData(EnumTileState.PlacedCross);
-            _selector = new(_boardData);
+            _selector.OnStart(_boardData);
 
             OnSubscribe();
         }
 
+        private void OnDestroy()
+        {
+            OnDispose();
+        }
+
         private void OnSubscribe()
         {
-            _gameManager.RegisterBoardSurfaceSelectEvent(OnSelect);
+            _gameManager.RegisterBoardSurfaceSelectEvent(OnSelectAsync);
             _gameManager.RegisterBoardSurfaceCheckBuriedEvent(OnCheckBuried);
 
             _gameManager.PlayerTurn.Subscribe(val => {
                 if (val == 1)
                 {
                     _currentPlayerData = _playerData[0];
+                    _view.OnChangePlayer(_currentPlayerData.PlacingType);
                 }
                 if (val == 2)
                 {
                     _currentPlayerData = _playerData[1];
+                    _view.OnChangePlayer(_currentPlayerData.PlacingType);
                 }
             }).AddTo(this);
+
+            _selector.OnMoveTileEvent += _view.OnMoveTile;
+            _selector.OnSelectTileEvent += _view.OnSelectTile;
+            _selector.OnChangePieceTypeEvent += _view.OnChangePieceType;
+
+        }
+
+        private void OnDispose()
+        {
+            _selector.OnMoveTileEvent -= _view.OnMoveTile;
+            _selector.OnSelectTileEvent -= _view.OnSelectTile;
+            _selector.OnChangePieceTypeEvent -= _view.OnChangePieceType;
         }
 
         //===============================================================================
@@ -54,8 +75,9 @@ namespace BoardSurface
         /// 盤面に駒を配置
         /// </summary>
         /// <returns></returns>
-        private async UniTask<bool> OnSelect()
+        private async UniTask<bool> OnSelectAsync()
         {
+            MyLogger.Log("BoardSurfaceManager OnSelectAsync");
             bool isWinner = false;
 
             isWinner = await _selector.OnChangeBoardAsync(_currentPlayerData);
@@ -67,12 +89,15 @@ namespace BoardSurface
         /// 盤面が埋まっているか判定
         /// </summary>
         /// <returns></returns>
-        private async UniTask<bool> OnCheckBuried()
+        private bool OnCheckBuried()
         {
+            MyLogger.Log("BoardSurfaceManager OnCheckBuried");
+
             if (!_boardData.OnCheckBuried()) return false;
 
             // 盤面をリセット
             _boardData.OnResetBoard();
+            _view.OnResetBoard();
             return true;
         }
 

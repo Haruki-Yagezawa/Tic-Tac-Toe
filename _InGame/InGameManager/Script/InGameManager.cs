@@ -16,7 +16,7 @@ namespace GameManager
         private readonly ReactiveProperty<int> _playerTurn = new(0);
 
         private Func<UniTask<bool>> _onBoardSurfaceSelectEvent;
-        private Func<UniTask<bool>> _onBoardSurfaceCheckBuriedEvent;
+        private Func<bool> _onBoardSurfaceCheckBuriedEvent;
 
 
         //===============================================================
@@ -35,7 +35,7 @@ namespace GameManager
         {
             _onBoardSurfaceSelectEvent = handler;
         }
-        public void RegisterBoardSurfaceCheckBuriedEvent(Func<UniTask<bool>> handler)
+        public void RegisterBoardSurfaceCheckBuriedEvent(Func<bool> handler)
         {
             _onBoardSurfaceCheckBuriedEvent = handler;
         }
@@ -52,12 +52,16 @@ namespace GameManager
         /// <returns></returns>
         private async UniTaskVoid OnGameProgressionAsync()
         {
+            MyLogger.Log("InGameManager OnGameProgressionAsync");
+
             bool isWin = false;
 
             do
             {
+                MyLogger.Log("InGameManager OnGameProgressionAsync チェック：ループしました");
+
                 // 盤面が埋まっているか判定
-                if (await _onBoardSurfaceCheckBuriedEvent.Invoke())
+                if (_onBoardSurfaceCheckBuriedEvent.Invoke())
                 {
                     // プレイヤーの操作を変更？
                 }
@@ -77,8 +81,10 @@ namespace GameManager
                 }
 
 
-            } while (isWin);
+            } while (!isWin);
 
+
+            MyLogger.Log("InGameManager OnGameProgressionAsync チェック：ゲーム終了");
 
         }
 

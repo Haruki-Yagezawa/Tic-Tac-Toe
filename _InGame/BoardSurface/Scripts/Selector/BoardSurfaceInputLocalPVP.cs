@@ -10,8 +10,16 @@ namespace BoardSurface
         private InputManager _inputManager;
 
 
-        protected override void OnChange_1P() { }
-        protected override void OnChange_2P() { }
+        protected override void OnChange_1P()
+        {
+            MyLogger.Log("BoardSurfaceInputLocalPVP OnChange_1P");
+
+        }
+        protected override void OnChange_2P()
+        {
+            MyLogger.Log("BoardSurfaceInputLocalPVP OnChange_2P");
+
+        }
 
 
         protected override void OnSubscribe()

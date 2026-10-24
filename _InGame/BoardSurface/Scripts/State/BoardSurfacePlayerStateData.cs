@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace BoardSurface
 {
@@ -22,10 +23,6 @@ namespace BoardSurface
         public int GetPieceMValue => _pieceMValue;
         public int GetPieceLValue => _pieceLValue;
 
-        public bool CheckNonePieceS => _pieceSValue == 0;
-        public bool CheckNonePieceM => _pieceMValue == 0;
-        public bool CheckNonePieceL => _pieceLValue == 0;
-
 
         public BoardSurfacePlayerStateData(EnumTileState placingType)
         {
@@ -40,6 +37,8 @@ namespace BoardSurface
         /// </summary>
         public void OnProvidePiece()
         {
+            MyLogger.Log("BoardSurfacePlayerStateData OnProvidePiece");
+
             _pieceSValue = PROVIDE_PIECE_S_VALUE;
             _pieceMValue = PROVIDE_PIECE_M_VALUE;
             _pieceLValue = PROVIDE_PIECE_L_VALUE;
@@ -52,6 +51,8 @@ namespace BoardSurface
         /// <returns></returns>
         public bool OnSubPiece(EnumPieceType type)
         {
+            MyLogger.Log("BoardSurfacePlayerStateData OnSubPiece 引数：type[" + type + "]");
+
             switch (type)
             {
                 case EnumPieceType.S:
@@ -77,6 +78,8 @@ namespace BoardSurface
         /// <returns></returns>
         public bool OnCheckNonePiece(EnumPieceType pieceType)
         {
+            MyLogger.Log("BoardSurfacePlayerStateData OnCheckNonePiece 引数：pieceType[" + pieceType + "]");
+
             switch (pieceType)
             {
                 case EnumPieceType.S:
@@ -86,7 +89,7 @@ namespace BoardSurface
                 case EnumPieceType.L:
                     return _pieceLValue != 0;
                 default:
-                    Debug.LogError("存在しない駒が指定されました");
+                    MyLogger.LogError("BoardSurfacePlayerStateData OnCheckNonePiece エラー：存在しない駒が指定されました");
                     return false;
             }
         }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace BoardSurface
 {
@@ -28,13 +29,15 @@ namespace BoardSurface
         /// <param name="pieceType"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public bool SetTileData(int x, int y, EnumTileState tileState, EnumPieceType pieceType)
+        public bool SetTileData(Vector2Int pos, EnumTileState tileState, EnumPieceType pieceType)
         {
-            // 範囲内チェック
-            if (!OnCheckWthinTheRange(x, y)) return false;
+            MyLogger.Log("BoardSurfaceStateData SetTileData 引数：pos[" + pos + "] tileState[" + tileState + "] pieceType[" + pieceType + "]");
 
-            _tileDatas[x, y].TileState = tileState;
-            _tileDatas[x, y].PieceType = pieceType;
+            // 範囲内チェック
+            if (!OnCheckWthinTheRange(pos)) return false;
+
+            _tileDatas[pos.x, pos.y].TileState = tileState;
+            _tileDatas[pos.x, pos.y].PieceType = pieceType;
 
             return true;
         }
@@ -45,13 +48,15 @@ namespace BoardSurface
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public (bool, EnumTileState, EnumPieceType) GetTileData(int x, int y)
+        public (bool, EnumTileState, EnumPieceType) GetTileData(Vector2Int pos)
         {
-            // 範囲内チェック
-            if (!OnCheckWthinTheRange(x, y)) return (false, EnumTileState.Empty, EnumPieceType.S);
+            MyLogger.Log("BoardSurfaceStateData SetTileData 引数：pos[" + pos + "]");
 
-            EnumTileState tileState = _tileDatas[x, y].TileState;
-            EnumPieceType pieceType = _tileDatas[x, y].PieceType;
+            // 範囲内チェック
+            if (!OnCheckWthinTheRange(pos)) return (false, EnumTileState.Empty, EnumPieceType.S);
+
+            EnumTileState tileState = _tileDatas[pos.x, pos.y].TileState;
+            EnumPieceType pieceType = _tileDatas[pos.x, pos.y].PieceType;
 
             return (true, tileState, pieceType);
         }
@@ -63,6 +68,8 @@ namespace BoardSurface
         /// <returns></returns>
         public bool OnCheckWinner(Vector2Int checkPos, EnumTileState tileState)
         {
+            MyLogger.Log("BoardSurfaceStateData OnCheckWinner 引数：checkPos[" + checkPos + "] tileState[" + tileState + "]");
+
             return OnConnectionExploration(checkPos, tileState);
         }
 
@@ -72,12 +79,14 @@ namespace BoardSurface
         /// <returns></returns>
         public bool OnCheckBuried()
         {
+            MyLogger.Log("BoardSurfaceStateData OnCheckBuried");
+
             for (int x = 0; x < TILE_SIZE_X; ++x)
             {
                 for (int y = 0; y < TILE_SIZE_Y; ++y)
                 {
                     // 空いていないか確認
-                    if (_tileDatas[x,y].TileState == EnumTileState.PlacedCircle ||
+                    if (_tileDatas[x, y].TileState == EnumTileState.PlacedCircle ||
                         _tileDatas[x, y].TileState == EnumTileState.PlacedCircle)
                     {
                         // 駒が配置されていて空いてない
@@ -98,6 +107,8 @@ namespace BoardSurface
         /// <returns></returns>
         public void OnResetBoard()
         {
+            MyLogger.Log("BoardSurfaceStateData OnResetBoard");
+
             for (int x = 0; x < TILE_SIZE_X; ++x)
             {
                 for (int y = 0; y < TILE_SIZE_Y; ++y)
@@ -122,11 +133,13 @@ namespace BoardSurface
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        private bool OnCheckWthinTheRange(int x, int y)
+        private bool OnCheckWthinTheRange(Vector2Int pos)
         {
-            if (0 > x || x <= TILE_SIZE_X || 0 > y || y <= TILE_SIZE_Y)
+            MyLogger.Log("BoardSurfaceStateData OnCheckWthinTheRange 引数：pos[" + pos + "]");
+
+            if (0 > pos.x || pos.x >= TILE_SIZE_X || 0 > pos.y || pos.y >= TILE_SIZE_Y)
             {
-                Debug.LogWarning("範囲外でした");
+                MyLogger.LogWarning("BoardSurfaceStateData OnCheckWthinTheRange 注意：範囲外でした");
                 return false;
             }
             return true;
@@ -141,6 +154,8 @@ namespace BoardSurface
         /// <returns></returns>
         private bool OnConnectionExploration(Vector2Int checkPos, EnumTileState tileState)
         {
+            MyLogger.Log("BoardSurfaceStateData OnConnectionExploration 引数：checkPos[" + checkPos + "] tileState[" + tileState + "]");
+
             int connectPoint = 1;
             Vector2Int addPos = new();
 
@@ -153,10 +168,10 @@ namespace BoardSurface
                     case 0:
                         addPos = new(1, 0);
                         break;
-                        case 1:
+                    case 1:
                         addPos = new(1, 1);
                         break;
-                        case 2:
+                    case 2:
                         addPos = new(0, 1);
                         break;
                 }
@@ -171,10 +186,12 @@ namespace BoardSurface
                 // 連結している数が指定数以上か
                 if (connectPoint >= CONNECT_VALUE)
                 {
+                    MyLogger.Log("BoardSurfaceStateData OnConnectionExploration 戻り値：bool[true]");
                     return true;
                 }
             }
 
+            MyLogger.Log("BoardSurfaceStateData OnConnectionExploration 戻り値：bool[false]");
             return false;
         }
         /// <summary>
@@ -187,14 +204,19 @@ namespace BoardSurface
         private void OnConnectionExploration_AdjacentTile(Vector2Int checkPos, Vector2Int addPos, EnumTileState tileState, ref int connectPoint)
         {
             Vector2Int explorationPos = checkPos + addPos;
-            if (tileState == _tileDatas[explorationPos.x, explorationPos.y].TileState)
-            {
-                // 連結している
-                ++connectPoint;
 
-                // 次の探査へ
-                OnConnectionExploration_AdjacentTile(explorationPos, addPos, tileState, ref connectPoint);
-            }
+            // 範囲内かを確認
+            if (!OnCheckWthinTheRange(explorationPos)) return;
+
+            // 同じプレイヤーのコマかを確認
+            if (tileState != _tileDatas[explorationPos.x, explorationPos.y].TileState) return;
+
+
+            // 連結している
+            ++connectPoint;
+
+            // 次の探査へ
+            OnConnectionExploration_AdjacentTile(explorationPos, addPos, tileState, ref connectPoint);
         }
     }
 }

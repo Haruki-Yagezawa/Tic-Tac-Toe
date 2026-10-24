@@ -2,6 +2,7 @@ using BoardSurface.CurrentTileData;
 using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace BoardSurface
 {
@@ -20,8 +21,14 @@ namespace BoardSurface
         private UpdateTileData _updateTileData;
 
 
+        public event Action<Vector2Int> OnMoveTileEvent;
 
-        public BoardSurfaceManager_Selector(BoardSurfaceStateData boardData)
+        public event Action<Vector2Int, EnumTileState, EnumPieceType> OnSelectTileEvent;
+
+        public event Action<EnumPieceType> OnChangePieceTypeEvent;
+
+
+        public void OnStart(BoardSurfaceStateData boardData)
         {
             _boardData = boardData;
         }
@@ -32,11 +39,16 @@ namespace BoardSurface
         /// <returns></returns>
         public async UniTask<bool> OnChangeBoardAsync(BoardSurfacePlayerStateData playerData)
         {
+            MyLogger.Log("BoardSurfaceManager_Selector OnChangeBoardAsync 引数：playerData[" + playerData + "]");
+
             _updateTileData = new();
 
             bool isSelect = false;
             while (!isSelect)
             {
+                // イベント発火
+                OnMoveTileEvent.Invoke(_updateTileData.Pos);
+
                 // 入力を待つ
                 EnumInputType inputType = await _inputBase.OnCheckInputAsync();
 
@@ -44,20 +56,19 @@ namespace BoardSurface
                 switch (inputType)
                 {
                     case EnumInputType.Left:
-                        OnCheckMoveTile(-1, 0);
+                        OnCheckMoveTile(new Vector2Int(-1, 0));
                         break;
                     case EnumInputType.Right:
-                        OnCheckMoveTile(1, 0);
+                        OnCheckMoveTile(new Vector2Int(1, 0));
                         break;
                     case EnumInputType.Up:
-                        OnCheckMoveTile(0, 1);
+                        OnCheckMoveTile(new Vector2Int(0, -1));
                         break;
                     case EnumInputType.Down:
-                        OnCheckMoveTile(0, -1);
+                        OnCheckMoveTile(new Vector2Int(0, 1));
                         break;
                     case EnumInputType.Select:
-                        OnCheckSelectTile(playerData);
-                        isSelect = true;
+                        isSelect = OnCheckSelectTile(playerData);
                         break;
                     case EnumInputType.PieceTypeChange:
                         OnChangePieceType();
@@ -65,7 +76,7 @@ namespace BoardSurface
                 }
             }
 
-            bool isWinner = _boardData.OnCheckWinner(_updateTileData.pos, playerData.PlacingType);
+            bool isWinner = _boardData.OnCheckWinner(_updateTileData.Pos, playerData.PlacingType);
 
             return isWinner;
         }
@@ -73,52 +84,55 @@ namespace BoardSurface
         /// <summary>
         /// 移動できるかを判定し、変更を反映する
         /// </summary>
-        private void OnCheckMoveTile(int x, int y)
+        private void OnCheckMoveTile(Vector2Int moveVectol)
         {
+            MyLogger.Log("BoardSurfaceManager_Selector OnCheckMoveTile 引数：moveVectol[" + moveVectol + "]");
+
             // 入力方向からタイルの座標情報を取得
-            int nextMoveTilePointX = _updateTileData.pos.x + x;
-            int nextMoveTilePointY = _updateTileData.pos.y + y;
+            int nextMoveTilePointX = _updateTileData.Pos.x + moveVectol.x;
+            int nextMoveTilePointY = _updateTileData.Pos.y + moveVectol.y;
 
             // タイルを取得（取得失敗したら範囲外）
             bool isSuccess = false;
             EnumTileState tileState;
             EnumPieceType pieceType;
-            (isSuccess, tileState, pieceType) = _boardData.GetTileData(nextMoveTilePointX, nextMoveTilePointY);
+            (isSuccess, tileState, pieceType) = _boardData.GetTileData(new Vector2Int(nextMoveTilePointX, nextMoveTilePointY));
             if (!isSuccess)
             {
                 // 範囲外
-                Debug.LogError("範囲外でした");
+
                 return;
             }
 
             // 変更を反映
-            _updateTileData.pos.x = x;
-            _updateTileData.pos.y = y;
+            _updateTileData.Pos = _updateTileData.Pos + moveVectol;
         }
 
         /// <summary>
         /// 駒を配置できるかを判定し、変更を反映する
         /// </summary>
-        private void OnCheckSelectTile(BoardSurfacePlayerStateData playerData)
+        private bool OnCheckSelectTile(BoardSurfacePlayerStateData playerData)
         {
+            MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile 引数：playerData[" + playerData + "]");
+
             // 指定した駒を所持しているか確認
-            if(!playerData.OnCheckNonePiece(_updateTileData.PieceType))
+            if (!playerData.OnCheckNonePiece(_updateTileData.PieceType))
             {
                 // 駒を所持してない
 
-                return;
+                return false;
             }
 
             // タイルを取得（取得失敗したら範囲外）
             bool isSuccess = false;
             EnumTileState tileState;
             EnumPieceType pieceType;
-            (isSuccess, tileState, pieceType) = _boardData.GetTileData(_updateTileData.pos.x, _updateTileData.pos.y);
+            (isSuccess, tileState, pieceType) = _boardData.GetTileData(_updateTileData.Pos);
             if (!isSuccess)
             {
                 // 範囲外
-                Debug.LogError("範囲外でした");
-                return;
+                MyLogger.LogWarning("BoardSurfaceManager_Selector OnCheckSelectTile エラー：範囲外でした");
+                return false;
             }
 
             // 既に駒が配置されているか確認
@@ -126,7 +140,7 @@ namespace BoardSurface
             {
                 // 配置済み
 
-                return;
+                return false;
             }
 
             // 前回配置されていた駒が相手の駒、且つ、自身が置こうと思っていた駒より配置されていたランクの方が高いか確認
@@ -137,11 +151,17 @@ namespace BoardSurface
             {
                 // ランクが低くて配置できない
 
-                return;
+                return false;
             }
 
             // 変更を反映
-            _boardData.SetTileData(_updateTileData.pos.x, _updateTileData.pos.y, playerData.PlacingType, _updateTileData.PieceType);
+            _boardData.SetTileData(_updateTileData.Pos, playerData.PlacingType, _updateTileData.PieceType);
+            playerData.OnSubPiece(_updateTileData.PieceType);
+
+            // イベント発火
+            OnSelectTileEvent.Invoke(_updateTileData.Pos, playerData.PlacingType, _updateTileData.PieceType);
+
+            return true;
         }
 
         /// <summary>
@@ -149,11 +169,16 @@ namespace BoardSurface
         /// </summary>
         private void OnChangePieceType()
         {
+            MyLogger.Log("BoardSurfaceManager_Selector OnChangePieceType");
+            // 次の駒を確認
             int newType = (int)_updateTileData.PieceType + 1;
-
             if (newType == Enum.GetNames(typeof(EnumPieceType)).Length) newType = 0;
 
+            // 変更を反映
             _updateTileData.PieceType = (EnumPieceType)newType;
+
+            // イベント発火
+            OnChangePieceTypeEvent.Invoke(_updateTileData.PieceType);
         }
     }
 }

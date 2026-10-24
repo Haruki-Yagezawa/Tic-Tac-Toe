@@ -14,7 +14,7 @@ namespace BoardSurface
         [SerializeField]
         private InGameManager _gameManager;
 
-        private ReactiveProperty<EnumInputType> _inputType;
+        private EnumInputType _inputType;
 
         private void Awake()
         {
@@ -31,12 +31,14 @@ namespace BoardSurface
         /// <returns></returns>
         public async UniTask<EnumInputType> OnCheckInputAsync()
         {
-            _inputType.Value = EnumInputType.Null;
+            MyLogger.Log("BoardSurfaceInputBase OnCheckInputAsync");
+
+            _inputType = EnumInputType.Null;
 
             // 値が変わる（入力されて関数が呼ばれる）まで止まる
-            await _inputType.Where(val => val != EnumInputType.Null).FirstAsync();
+            await UniTask.WaitUntil(() => _inputType != EnumInputType.Null);
 
-            return _inputType.Value;
+            return _inputType;
         }
 
 
@@ -64,27 +66,39 @@ namespace BoardSurface
         // 押した内容（継承先で呼び出す）
         protected void OnPush_Left()
         {
-            _inputType.Value = EnumInputType.Left;
+            MyLogger.Log("BoardSurfaceInputBase OnPush_Left");
+
+            _inputType = EnumInputType.Left;
         }
         protected void OnPush_Right()
         {
-            _inputType.Value = EnumInputType.Right;
+            MyLogger.Log("BoardSurfaceInputBase OnPush_Right");
+
+            _inputType = EnumInputType.Right;
         }
         protected void OnPush_Up()
         {
-            _inputType.Value = EnumInputType.Up;
+            MyLogger.Log("BoardSurfaceInputBase OnPush_Up");
+
+            _inputType = EnumInputType.Up;
         }
         protected void OnPush_Down()
         {
-            _inputType.Value = EnumInputType.Down;
+            MyLogger.Log("BoardSurfaceInputBase OnPush_Down");
+
+            _inputType = EnumInputType.Down;
         }
         protected void OnPush_Select()
         {
-            _inputType.Value = EnumInputType.Select;
+            MyLogger.Log("BoardSurfaceInputBase OnPush_Select");
+
+            _inputType = EnumInputType.Select;
         }
         protected void OnPush_PieceTypeChange()
         {
-            _inputType.Value = EnumInputType.PieceTypeChange;
+            MyLogger.Log("BoardSurfaceInputBase OnPush_PieceTypeChange");
+
+            _inputType = EnumInputType.PieceTypeChange;
         }
 
         //==================================================================

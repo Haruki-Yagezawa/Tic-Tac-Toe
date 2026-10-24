@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7d73d3abaf2244499ea1feb3aa82b0, type: 3}
+  m_Name: BoardSurfaceSpriteData
+  m_EditorClassIdentifier: 
+  _pieceS: {fileID: 3161890949516155110, guid: 0ecfa41365d6bec4c96253fe45eca033, type: 3}
+  _pieceM: {fileID: -4255931742832012976, guid: c79feb6fcb1fd584b8058df6572947e0, type: 3}
+  _pieceL: {fileID: -3380157103476435368, guid: e29852bb924e4ae438537bd423942022, type: 3}
+  _colorPiece1P: {r: 1, g: 0, b: 0, a: 1}
+  _colorPiece2P: {r: 0, g: 0.14202714, b: 1, a: 1}
+  _tilePlaced: {fileID: -8150423329998539578, guid: d931ca49592d2ce4f8d47879dc4ee83c, type: 3}
+  _tileEmpty: {fileID: 824969557, guid: d931ca49592d2ce4f8d47879dc4ee83c, type: 3}
+  _colorSelect1P: {r: 1, g: 0.54510146, b: 0.4669811, a: 1}
+  _colorSelect2P: {r: 0.5613208, g: 0.83329433, b: 1, a: 1}

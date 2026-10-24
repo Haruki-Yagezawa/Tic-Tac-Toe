@@ -7,7 +7,7 @@ namespace BoardSurface.CurrentTileData
     /// </summary>
     public struct UpdateTileData
     {
-        public Vector2Int pos;
+        public Vector2Int Pos;
         public EnumPieceType PieceType;
     }
 }
