@@ -89,7 +89,7 @@ namespace BoardSurface
                 {
                     // 空いていないか確認
                     if (_tileDatas[x, y].TileState == EnumTileState.PlacedCircle ||
-                        _tileDatas[x, y].TileState == EnumTileState.PlacedCircle)
+                        _tileDatas[x, y].TileState == EnumTileState.PlacedCross)
                     {
                         // 駒が配置されていて空いてない
                         continue;
