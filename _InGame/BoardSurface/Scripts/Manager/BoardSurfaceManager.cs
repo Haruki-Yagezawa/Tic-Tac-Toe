@@ -95,6 +95,8 @@ namespace BoardSurface
 
             if (!_boardData.OnCheckBuried()) return false;
 
+            MyLogger.Log("BoardSurfaceManager OnCheckBuried チェック：埋まりました");
+
             // 盤面をリセット
             _boardData.OnResetBoard();
             _view.OnResetBoard();

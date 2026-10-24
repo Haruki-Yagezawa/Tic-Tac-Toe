@@ -21,6 +21,8 @@ namespace BoardSurface
 
         private TileData[,] _tileDatas = new TileData[TILE_SIZE_X, TILE_SIZE_Y];
 
+        public Vector2Int TileCenter = new Vector2Int(TILE_SIZE_X / 2, TILE_SIZE_Y / 2);
+
 
         /// <summary>
         /// タイルの配置状態を変更する

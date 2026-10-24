@@ -41,14 +41,17 @@ namespace BoardSurface
         {
             MyLogger.Log("BoardSurfaceManager_Selector OnChangeBoardAsync 引数：playerData[" + playerData + "]");
 
-            _updateTileData = new();
+            // 初期化
+            _updateTileData.Pos = _boardData.TileCenter;
+            _updateTileData.PieceType = EnumPieceType.S;
+
+            // イベント発火
+            OnMoveTileEvent.Invoke(_updateTileData.Pos);
+            OnChangePieceTypeEvent.Invoke(_updateTileData.PieceType);
 
             bool isSelect = false;
             while (!isSelect)
             {
-                // イベント発火
-                OnMoveTileEvent.Invoke(_updateTileData.Pos);
-
                 // 入力を待つ
                 EnumInputType inputType = await _inputBase.OnCheckInputAsync();
 
@@ -106,6 +109,9 @@ namespace BoardSurface
 
             // 変更を反映
             _updateTileData.Pos = _updateTileData.Pos + moveVectol;
+
+            // イベント発火
+            OnMoveTileEvent.Invoke(_updateTileData.Pos);
         }
 
         /// <summary>

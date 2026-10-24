@@ -8,19 +8,19 @@ public class MyLogger : MonoBehaviour
     public static void Log(string log)
     {
 #if UNITY_EDITOR
-        Debug.Log(log);
+        Debug.Log("88MyLogger88" + log);
 #endif
     }
     public static void LogWarning(string log)
     {
 #if UNITY_EDITOR
-        Debug.LogWarning(log);
+        Debug.LogWarning("88MyLogger88" + log);
 #endif
     }
     public static void LogError(string log)
     {
 #if UNITY_EDITOR
-        Debug.LogError(log);
+        Debug.LogError("88MyLogger88" + log);
 #endif
     }
 }
