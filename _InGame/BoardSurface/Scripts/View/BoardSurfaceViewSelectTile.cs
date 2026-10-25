@@ -29,6 +29,15 @@ namespace BoardSurface
         // 駒の変更用シーケンス
         private Sequence _sequenceChangePieceType;
 
+        private Vector3 _startScalePiece;
+        private Vector3 _startRoatatePiece;
+
+
+        private void Awake()
+        {
+            _startScalePiece = _spriteRendererPieceType.transform.localScale;
+            _startRoatatePiece = _spriteRendererPieceType.transform.localEulerAngles;
+        }
 
         private void OnDestroy()
         {
@@ -66,8 +75,8 @@ namespace BoardSurface
 
             // シーケンスを作って再生
             _sequenceChangePieceType = DOTween.Sequence()
-                .Append(transform.DOScale(Vector3.zero, MOVE_TIME_CHAGE_PIECE_TYPE).From())
-                .Join(transform.DORotate(Vector3.zero, MOVE_TIME_CHAGE_PIECE_TYPE).From())
+                .Append(_spriteRendererPieceType.transform.DOScale(_startScalePiece, MOVE_TIME_CHAGE_PIECE_TYPE).From(Vector3.zero))
+                .Join(_spriteRendererPieceType.transform.DORotate(_startRoatatePiece, MOVE_TIME_CHAGE_PIECE_TYPE).From(new Vector3(0, 0, 90)))
                 .SetEase(Ease.Linear);
         }
 
