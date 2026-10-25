@@ -22,9 +22,9 @@ namespace UI
 
         [Header("駒の数")]
         [SerializeField]
-        private TMP_Text[] _textPieceValueP1;
+        private TextMeshProUGUI[] _textPieceValueP1;
         [SerializeField]
-        private TMP_Text[] _textPieceValueP2;
+        private TextMeshProUGUI[] _textPieceValueP2;
 
         [Header("背景")]
         [SerializeField]
@@ -57,7 +57,7 @@ namespace UI
         {
             MyLogger.Log("UIPieceValueManager OnChangePieceValue player[" + player + "]");
 
-            TMP_Text[] targetText = null;
+            TextMeshProUGUI[] targetText = null;
 
             // 対象のテキストを確認
             if (player == EnumTileState.PlacedCircle) targetText = _textPieceValueP1;
@@ -69,9 +69,9 @@ namespace UI
             }
 
             // 反映
-            for (int i = 0; i > targetText.Length; ++i)
+            for (int i = 0; i < targetText.Length; ++i)
             {
-                targetText[i].text = "×" + pieceValue[i];
+                targetText[i].text = " × " + pieceValue[i];
             }
         }
     }

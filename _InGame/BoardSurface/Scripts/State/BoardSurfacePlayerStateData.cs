@@ -10,7 +10,7 @@ namespace BoardSurface
     {
         private const int PROVIDE_PIECE_S_VALUE = 2;
         private const int PROVIDE_PIECE_M_VALUE = 2;
-        private const int PROVIDE_PIECE_L_VALUE = 2;
+        private const int PROVIDE_PIECE_L_VALUE = 1;
 
         private int _pieceSValue = 0;
         private int _pieceMValue = 0;
