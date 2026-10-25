@@ -43,6 +43,10 @@ namespace UI
             OnMoveUI();
         }
 
+        /// <summary>
+        /// 操作プレイヤーの表示を変更する
+        /// </summary>
+        /// <param name="player"></param>
         public void OnChangePlayer(EnumTileState player)
         {
             MyLogger.Log("UIPlayerTurnManager OnChangePlayer player[" + player + "]");
@@ -65,6 +69,8 @@ namespace UI
             _displayTurn = player;
             OnMoveUI();
         }
+
+
 
         private void OnMoveUI()
         {

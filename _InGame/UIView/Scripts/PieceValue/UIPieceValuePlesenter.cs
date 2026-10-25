@@ -28,6 +28,7 @@ namespace UI
         private void OnSubscribe()
         {
             _boardSurfaceManager.OnChangePieceValueEvent += _manager.OnChangePieceValue;
+            _boardSurfaceManager.OnMissChoice_NotHaveEvent += _manager.OnShakeRabel;
         }
 
         private void OnDispose()

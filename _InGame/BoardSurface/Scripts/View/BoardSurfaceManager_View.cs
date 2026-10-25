@@ -75,6 +75,27 @@ namespace BoardSurface
                     tile.OnReset();
             }
         }
+
+        /// <summary>
+        /// 駒を配置するときに、既に外の駒が配置されていた時に呼び出される（カーソルを揺らす）
+        /// </summary>
+        public void OnMissChoice_Allocated()
+        {
+            MyLogger.Log("BoardSurfaceManager_View OnMissChoice_Allocated");
+
+            _selectTile.OnShakeCursol();
+        }
+
+        /// <summary>
+        /// 駒を配置するときに、前回配置した駒のほうがランクが上の時に呼び出される（指定されたタイルの駒を揺らす）
+        /// </summary>
+        /// <param name="pos"></param>
+        public void OnMissChoice_LowRank(Vector2Int pos)
+        {
+            MyLogger.Log("BoardSurfaceManager_View OnMissChoice_LowRankEvent 引数：pos[" + pos + "]");
+
+            _viewTiles[pos.y].ArrayX[pos.x].OnShakePiece();
+        }
     }
 
     [System.Serializable]

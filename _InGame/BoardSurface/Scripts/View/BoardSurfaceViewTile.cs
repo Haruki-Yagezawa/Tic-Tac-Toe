@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace BoardSurface
@@ -7,6 +8,10 @@ namespace BoardSurface
     /// </summary>
     public class BoardSurfaceViewTile : MonoBehaviour
     {
+        private const float SHAKE_POWER_PIECE = 0.2f;
+        private const float MOVE_TIME_PIECE = 0.5f;
+
+
         [SerializeField]
         private BoardSurfaceSpriteDataAsset _sprite;
 
@@ -18,6 +23,15 @@ namespace BoardSurface
         [Header("駒の種類関連")]
         [SerializeField]
         private SpriteRenderer _spriteRendererPiece;
+
+
+        private Vector3 _startPositionPiece;
+
+
+        private void Start()
+        {
+            _startPositionPiece = _spriteRendererPiece.transform.localPosition;
+        }
 
         /// <summary>
         /// タイルと駒のテクスチャを変更する
@@ -66,6 +80,18 @@ namespace BoardSurface
 
             _spriteRendererTile.sprite = _sprite.TileEmpty;
             _spriteRendererTile.color = Color.white;
+        }
+
+        /// <summary>
+        /// 駒の部分を揺らす
+        /// </summary>
+        public void OnShakePiece()
+        {
+            MyLogger.Log("BoardSurfaceViewTile OnShakePiece");
+
+            _spriteRendererPiece.DOKill();
+            _spriteRendererPiece.transform.localPosition = _startPositionPiece;
+            _spriteRendererPiece.transform.DOShakePosition(MOVE_TIME_PIECE, SHAKE_POWER_PIECE);
         }
     }
 }

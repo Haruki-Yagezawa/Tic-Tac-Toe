@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using GameManager;
 using R3;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace BoardSurface
@@ -24,6 +25,7 @@ namespace BoardSurface
         private BoardSurfacePlayerStateData _currentPlayerData;
 
         public event Action<EnumTileState, int[]> OnChangePieceValueEvent;
+        public event Action<EnumTileState, EnumPieceType> OnMissChoice_NotHaveEvent;
 
 
         private void Awake()
@@ -75,6 +77,9 @@ namespace BoardSurface
             _selector.OnMoveTileEvent += _view.OnMoveTile;
             _selector.OnSelectTileEvent += _view.OnSelectTile;
             _selector.OnChangePieceTypeEvent += _view.OnChangePieceType;
+            _selector.OnMissChoice_NotHaveEvent += OnMissChoice_NotHave;
+            _selector.OnMissChoice_AllocatedEvent += _view.OnMissChoice_Allocated;
+            _selector.OnMissChoice_LowRankEvent += _view.OnMissChoice_LowRank;
 
         }
 
@@ -123,9 +128,25 @@ namespace BoardSurface
             // 駒を加算
             _playerData[0].OnProvidePiece();
             _playerData[1].OnProvidePiece();
+
+            // 今の駒の数を表示
+            foreach (var pd in _playerData)
+            {
+                int[] pieveValues = new int[] { pd.GetPieceSValue,
+                                            pd.GetPieceMValue,
+                                            pd.GetPieceLValue};
+                OnChangePieceValueEvent.Invoke(pd.PlacingType, pieveValues);
+            }
+
             return true;
         }
 
 
+
+        private void OnMissChoice_NotHave(EnumTileState player, EnumPieceType pieceType)
+        {
+            MyLogger.Log("BoardSurfaceManager OnMissChoice_NotHave");
+            OnMissChoice_NotHaveEvent.Invoke(player, pieceType);
+        }
     }
 }

@@ -42,9 +42,12 @@ namespace BoardSurface
         {
             MyLogger.Log("BoardSurfacePlayerStateData OnProvidePiece");
 
-            _pieceSValue += PROVIDE_PIECE_S_VALUE;
-            _pieceMValue += PROVIDE_PIECE_M_VALUE;
-            _pieceLValue += PROVIDE_PIECE_L_VALUE;
+            //_pieceSValue += PROVIDE_PIECE_S_VALUE;
+            //_pieceMValue += PROVIDE_PIECE_M_VALUE;
+            //_pieceLValue += PROVIDE_PIECE_L_VALUE;
+            _pieceSValue = PROVIDE_PIECE_S_VALUE;
+            _pieceMValue = PROVIDE_PIECE_M_VALUE;
+            _pieceLValue = PROVIDE_PIECE_L_VALUE;
         }
 
         /// <summary>

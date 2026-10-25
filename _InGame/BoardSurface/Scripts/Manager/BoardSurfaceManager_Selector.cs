@@ -27,6 +27,19 @@ namespace BoardSurface
 
         public event Action<EnumPieceType> OnChangePieceTypeEvent;
 
+        /// <summary>
+        /// 駒を持っていないイベント
+        /// </summary>
+        public event Action<EnumTileState, EnumPieceType> OnMissChoice_NotHaveEvent;
+        /// <summary>
+        /// 既に配置済みで配置不可イベント
+        /// </summary>
+        public event Action OnMissChoice_AllocatedEvent;
+        /// <summary>
+        /// ランクが前回配置した物のほうが上イベント
+        /// </summary>
+        public event Action<Vector2Int> OnMissChoice_LowRankEvent;
+
 
         public void OnStart(BoardSurfaceStateData boardData)
         {
@@ -126,6 +139,7 @@ namespace BoardSurface
             {
                 // 駒を所持してない
                 MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：駒を所持してない");
+                OnMissChoice_NotHaveEvent.Invoke(playerData.PlacingType,_updateTileData.PieceType);
                 return false;
             }
 
@@ -146,6 +160,7 @@ namespace BoardSurface
             {
                 // 配置済み
                 MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：配置済み");
+                OnMissChoice_AllocatedEvent.Invoke();
                 return false;
             }
 
@@ -157,6 +172,7 @@ namespace BoardSurface
             {
                 // ランクが低くて配置できない
                 MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：ランクが低くて配置できない");
+                OnMissChoice_LowRankEvent.Invoke(_updateTileData.Pos);
                 return false;
             }
 

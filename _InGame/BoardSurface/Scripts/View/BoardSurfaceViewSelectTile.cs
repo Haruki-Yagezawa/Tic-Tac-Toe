@@ -11,6 +11,9 @@ namespace BoardSurface
     {
         private const float MOVE_TIME = 0.3f;
         private const float MOVE_TIME_CHAGE_PIECE_TYPE = 0.2f;
+        private const float SHAKE_POWER_CURSOL = 0.25f;
+        private const float MOVE_TIME_CURSOL = 0.5f;
+
 
         [SerializeField]
         private BoardSurfaceSpriteDataAsset _sprite;
@@ -32,11 +35,15 @@ namespace BoardSurface
         private Vector3 _startScalePiece;
         private Vector3 _startRoatatePiece;
 
+        private Vector3 _startPositionSelect;
+
 
         private void Awake()
         {
             _startScalePiece = _spriteRendererPieceType.transform.localScale;
             _startRoatatePiece = _spriteRendererPieceType.transform.localEulerAngles;
+
+            _startPositionSelect = _spriteRendererSelect.transform.localPosition;
         }
 
         private void OnDestroy()
@@ -98,6 +105,17 @@ namespace BoardSurface
             {
                 _spriteRendererSelect.color = _color2P;
             }
+        }
+
+        /// <summary>
+        /// カーソルを揺らす
+        /// </summary>
+        public void OnShakeCursol()
+        {
+            MyLogger.Log("BoardSurfaceViewSelectTile OnShakeCursol");
+            _spriteRendererSelect.DOKill();
+            _spriteRendererSelect.transform.localPosition = _startPositionSelect;
+            _spriteRendererSelect.transform.DOShakePosition(SHAKE_POWER_CURSOL, MOVE_TIME_CURSOL);
         }
     }
 }
