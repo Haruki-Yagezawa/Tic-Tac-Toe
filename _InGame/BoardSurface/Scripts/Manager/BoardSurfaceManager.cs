@@ -35,6 +35,19 @@ namespace BoardSurface
             OnSubscribe();
         }
 
+        private void Start()
+        {
+
+            // 今の駒の数をイベント経由で渡す
+            foreach (var pd in _playerData)
+            {
+                int[] pieveValues = new int[] { pd.GetPieceSValue,
+                                            pd.GetPieceMValue,
+                                            pd.GetPieceLValue};
+                OnChangePieceValueEvent.Invoke(pd.PlacingType, pieveValues);
+            }
+        }
+
         private void OnDestroy()
         {
             OnDispose();
