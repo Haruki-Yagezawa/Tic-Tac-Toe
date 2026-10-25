@@ -28,12 +28,16 @@ namespace BoardSurface
         [SerializeField]
         private Sprite _tileEmpty;
 
+        [SerializeField]
+        private Color _colorTile1P;
+        [SerializeField]
+        private Color _colorTile2P;
 
-        [Header("選択項目関連")]
+        [Header("UI関連")]
         [SerializeField]
-        private Color _colorSelect1P;
+        private Color _colorUI1P;
         [SerializeField]
-        private Color _colorSelect2P;
+        private Color _colorUI2P;
 
 
         public Sprite PieceS => _pieceS;
@@ -66,20 +70,40 @@ namespace BoardSurface
         {
             MyLogger.Log("BoardSurfaceSpriteDataAsset GetColorPiece 引数：player[" + player + "]");
 
-            if (player == EnumTileState.PlacedCircle) return _colorPiece1P;
-            if (player == EnumTileState.PlacedCross) return _colorPiece2P;
+            if (player == EnumTileState.PlacedCircle ||
+                player == EnumTileState.EmptyCircle) return _colorPiece1P;
+
+            if (player == EnumTileState.PlacedCross ||
+                player == EnumTileState.EmptyCross) return _colorPiece2P;
+
             MyLogger.LogError("BoardSurfaceSpriteDataAsset GetColorPiece エラー：1P、2P以外の値が指定されました");
             return Color.clear;
         }
 
-        public Color GetColorSelect(EnumTileState player)
+        public Color GetColorTile(EnumTileState player)
         {
-            MyLogger.Log("BoardSurfaceSpriteDataAsset GetColorSelect 引数：player[" + player + "]");
+            MyLogger.Log("BoardSurfaceSpriteDataAsset GetColorTile 引数：player[" + player + "]");
 
-            if (player == EnumTileState.PlacedCircle) return _colorSelect1P;
-            if (player == EnumTileState.PlacedCross) return _colorSelect2P;
-            MyLogger.LogError("BoardSurfaceSpriteDataAsset GetColorSelect エラー：1P、2P以外の値が指定されました");
-            return Color.clear;
+            if (player == EnumTileState.PlacedCircle) return _colorTile1P;
+
+            if (player == EnumTileState.PlacedCross) return _colorTile2P;
+
+            if (player == EnumTileState.EmptyCircle ||
+                player == EnumTileState.EmptyCross) return Color.white;
+
+            MyLogger.LogError("BoardSurfaceSpriteDataAsset GetColorTile エラー：1P、2P以外の値が指定されました");
+            return Color.white;
+        }
+        public Color GetColorUI(EnumTileState player)
+        {
+            MyLogger.Log("BoardSurfaceSpriteDataAsset GetColorUI 引数：player[" + player + "]");
+
+            if (player == EnumTileState.PlacedCircle) return _colorUI1P;
+
+            if (player == EnumTileState.PlacedCross) return _colorUI2P;
+
+            MyLogger.LogError("BoardSurfaceSpriteDataAsset GetColorUI エラー：1P、2P以外の値が指定されました");
+            return Color.white;
         }
     }
 }

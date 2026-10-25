@@ -125,7 +125,7 @@ namespace BoardSurface
             if (!playerData.OnCheckNonePiece(_updateTileData.PieceType))
             {
                 // 駒を所持してない
-
+                MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：駒を所持してない");
                 return false;
             }
 
@@ -145,7 +145,7 @@ namespace BoardSurface
             if (tileState == EnumTileState.PlacedCircle || tileState == EnumTileState.PlacedCross)
             {
                 // 配置済み
-
+                MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：配置済み");
                 return false;
             }
 
@@ -156,7 +156,7 @@ namespace BoardSurface
                 (int)_updateTileData.PieceType < (int)pieceType )
             {
                 // ランクが低くて配置できない
-
+                MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：ランクが低くて配置できない");
                 return false;
             }
 

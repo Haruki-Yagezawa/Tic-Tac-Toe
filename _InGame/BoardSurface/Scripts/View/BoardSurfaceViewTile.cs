@@ -28,25 +28,27 @@ namespace BoardSurface
         {
             MyLogger.Log("BoardSurfaceViewTile OnChangeTileAndPiece 引数：tileState[" + tileState + "]　pieceType[" + pieceType + "]");
 
-            // 駒の色を変更
-            _spriteRendererPiece.color = _sprite.GetColorPiece(tileState);
-
             // 盤面の状態テクスチャと駒の色を変更
             switch (tileState)
             {
                 case EnumTileState.PlacedCircle:
                 case EnumTileState.PlacedCross:
                     _spriteRendererTile.sprite = _sprite.TilePlaced;
+                    _spriteRendererTile.color = _sprite.GetColorTile(tileState);
+                    _spriteRendererPiece.color = _sprite.GetColorPiece(tileState);
                     break;
 
                 case EnumTileState.EmptyCircle:
                 case EnumTileState.EmptyCross:
                     _spriteRendererTile.sprite = _sprite.TileEmpty;
+                    _spriteRendererTile.color = _sprite.GetColorTile(tileState);
+                    _spriteRendererPiece.color = _sprite.GetColorPiece(tileState);
                     break;
 
                 case EnumTileState.Empty:
                     // 空だったら変更した後終了
                     _spriteRendererTile.sprite = _sprite.TileEmpty;
+                    _spriteRendererTile.color = Color.white;
                     _spriteRendererPiece.color = Color.clear;
                     return;
             }
@@ -63,6 +65,7 @@ namespace BoardSurface
             MyLogger.Log("BoardSurfaceViewTile OnReset");
 
             _spriteRendererTile.sprite = _sprite.TileEmpty;
+            _spriteRendererTile.color = Color.white;
         }
     }
 }

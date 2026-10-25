@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using GameManager;
 using R3;
+using System;
 using UnityEngine;
 
 namespace BoardSurface
@@ -22,7 +23,7 @@ namespace BoardSurface
         private BoardSurfacePlayerStateData[] _playerData = new BoardSurfacePlayerStateData[2];
         private BoardSurfacePlayerStateData _currentPlayerData;
 
-
+        public event Action<EnumTileState, int[]> OnChangePieceValueEvent;
 
 
         private void Awake()
@@ -44,7 +45,8 @@ namespace BoardSurface
             _gameManager.RegisterBoardSurfaceSelectEvent(OnSelectAsync);
             _gameManager.RegisterBoardSurfaceCheckBuriedEvent(OnCheckBuried);
 
-            _gameManager.PlayerTurn.Subscribe(val => {
+            _gameManager.PlayerTurn.Subscribe(val =>
+            {
                 if (val == 1)
                 {
                     _currentPlayerData = _playerData[0];
@@ -82,6 +84,12 @@ namespace BoardSurface
 
             isWinner = await _selector.OnChangeBoardAsync(_currentPlayerData);
 
+            // 今の駒の数をイベント経由で渡す
+            int[] pieveValues = new int[] { _currentPlayerData.GetPieceSValue,
+                                            _currentPlayerData.GetPieceMValue,
+                                            _currentPlayerData.GetPieceLValue};
+            OnChangePieceValueEvent.Invoke(_currentPlayerData.PlacingType, pieveValues);
+
             return isWinner;
         }
         //===============================================================================
@@ -98,6 +106,10 @@ namespace BoardSurface
             // 盤面をリセット
             _boardData.OnResetBoard();
             _view.OnResetBoard();
+
+            // 駒を加算
+            _playerData[0].OnProvidePiece();
+            _playerData[1].OnProvidePiece();
             return true;
         }
 

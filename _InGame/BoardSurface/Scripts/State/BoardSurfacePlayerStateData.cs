@@ -17,6 +17,9 @@ namespace BoardSurface
         private int _pieceLValue = 0;
 
 
+        /// <summary>
+        /// プレイヤーが置く駒の種類（◯✕のどちらか）
+        /// </summary>
         public readonly EnumTileState PlacingType;
 
         public int GetPieceSValue => _pieceSValue;
@@ -39,9 +42,9 @@ namespace BoardSurface
         {
             MyLogger.Log("BoardSurfacePlayerStateData OnProvidePiece");
 
-            _pieceSValue = PROVIDE_PIECE_S_VALUE;
-            _pieceMValue = PROVIDE_PIECE_M_VALUE;
-            _pieceLValue = PROVIDE_PIECE_L_VALUE;
+            _pieceSValue += PROVIDE_PIECE_S_VALUE;
+            _pieceMValue += PROVIDE_PIECE_M_VALUE;
+            _pieceLValue += PROVIDE_PIECE_L_VALUE;
         }
 
         /// <summary>
