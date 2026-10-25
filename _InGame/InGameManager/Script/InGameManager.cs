@@ -1,3 +1,4 @@
+using BoardSurface;
 using Cysharp.Threading.Tasks;
 using R3;
 using System;
@@ -29,6 +30,8 @@ namespace GameManager
         /// 1=1P 2=2P 0=初期値
         /// </summary>
         public ReadOnlyReactiveProperty<int> PlayerTurn => _playerTurn;
+
+        public event Action<int> OnResultEvent;
 
 
         public void RegisterBoardSurfaceSelectEvent(Func<UniTask<bool>> handler)
@@ -86,6 +89,7 @@ namespace GameManager
 
             MyLogger.Log("InGameManager OnGameProgressionAsync チェック：ゲーム終了");
 
+            OnResultEvent?.Invoke(_playerTurn.Value);
         }
 
 

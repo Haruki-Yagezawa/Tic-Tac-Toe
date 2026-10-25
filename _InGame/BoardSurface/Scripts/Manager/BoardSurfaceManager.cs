@@ -46,7 +46,7 @@ namespace BoardSurface
                 int[] pieveValues = new int[] { pd.GetPieceSValue,
                                             pd.GetPieceMValue,
                                             pd.GetPieceLValue};
-                OnChangePieceValueEvent.Invoke(pd.PlacingType, pieveValues);
+                OnChangePieceValueEvent?.Invoke(pd.PlacingType, pieveValues);
             }
         }
 
@@ -106,7 +106,7 @@ namespace BoardSurface
             int[] pieveValues = new int[] { _currentPlayerData.GetPieceSValue,
                                             _currentPlayerData.GetPieceMValue,
                                             _currentPlayerData.GetPieceLValue};
-            OnChangePieceValueEvent.Invoke(_currentPlayerData.PlacingType, pieveValues);
+            OnChangePieceValueEvent?.Invoke(_currentPlayerData.PlacingType, pieveValues);
 
             return isWinner;
         }
@@ -135,7 +135,7 @@ namespace BoardSurface
                 int[] pieveValues = new int[] { pd.GetPieceSValue,
                                             pd.GetPieceMValue,
                                             pd.GetPieceLValue};
-                OnChangePieceValueEvent.Invoke(pd.PlacingType, pieveValues);
+                OnChangePieceValueEvent?.Invoke(pd.PlacingType, pieveValues);
             }
 
             return true;
@@ -146,7 +146,7 @@ namespace BoardSurface
         private void OnMissChoice_NotHave(EnumTileState player, EnumPieceType pieceType)
         {
             MyLogger.Log("BoardSurfaceManager OnMissChoice_NotHave");
-            OnMissChoice_NotHaveEvent.Invoke(player, pieceType);
+            OnMissChoice_NotHaveEvent?.Invoke(player, pieceType);
         }
     }
 }

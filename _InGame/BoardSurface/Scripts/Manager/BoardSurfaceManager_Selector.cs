@@ -59,8 +59,8 @@ namespace BoardSurface
             _updateTileData.PieceType = EnumPieceType.S;
 
             // イベント発火
-            OnMoveTileEvent.Invoke(_updateTileData.Pos);
-            OnChangePieceTypeEvent.Invoke(_updateTileData.PieceType);
+            OnMoveTileEvent?.Invoke(_updateTileData.Pos);
+            OnChangePieceTypeEvent?.Invoke(_updateTileData.PieceType);
 
             bool isSelect = false;
             while (!isSelect)
@@ -124,7 +124,7 @@ namespace BoardSurface
             _updateTileData.Pos = _updateTileData.Pos + moveVectol;
 
             // イベント発火
-            OnMoveTileEvent.Invoke(_updateTileData.Pos);
+            OnMoveTileEvent?.Invoke(_updateTileData.Pos);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace BoardSurface
             {
                 // 駒を所持してない
                 MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：駒を所持してない");
-                OnMissChoice_NotHaveEvent.Invoke(playerData.PlacingType,_updateTileData.PieceType);
+                OnMissChoice_NotHaveEvent?.Invoke(playerData.PlacingType,_updateTileData.PieceType);
                 return false;
             }
 
@@ -160,7 +160,7 @@ namespace BoardSurface
             {
                 // 配置済み
                 MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：配置済み");
-                OnMissChoice_AllocatedEvent.Invoke();
+                OnMissChoice_AllocatedEvent?.Invoke();
                 return false;
             }
 
@@ -172,7 +172,7 @@ namespace BoardSurface
             {
                 // ランクが低くて配置できない
                 MyLogger.Log("BoardSurfaceManager_Selector OnCheckSelectTile チェック：ランクが低くて配置できない");
-                OnMissChoice_LowRankEvent.Invoke(_updateTileData.Pos);
+                OnMissChoice_LowRankEvent?.Invoke(_updateTileData.Pos);
                 return false;
             }
 
@@ -181,7 +181,7 @@ namespace BoardSurface
             playerData.OnSubPiece(_updateTileData.PieceType);
 
             // イベント発火
-            OnSelectTileEvent.Invoke(_updateTileData.Pos, playerData.PlacingType, _updateTileData.PieceType);
+            OnSelectTileEvent?.Invoke(_updateTileData.Pos, playerData.PlacingType, _updateTileData.PieceType);
 
             return true;
         }
@@ -200,7 +200,7 @@ namespace BoardSurface
             _updateTileData.PieceType = (EnumPieceType)newType;
 
             // イベント発火
-            OnChangePieceTypeEvent.Invoke(_updateTileData.PieceType);
+            OnChangePieceTypeEvent?.Invoke(_updateTileData.PieceType);
         }
     }
 }

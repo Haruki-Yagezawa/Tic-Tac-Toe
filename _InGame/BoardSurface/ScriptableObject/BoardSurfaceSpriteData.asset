@@ -15,9 +15,11 @@ MonoBehaviour:
   _pieceS: {fileID: -6930793143504519088, guid: c89048461ca41e246970d0bd69a7ec57, type: 3}
   _pieceM: {fileID: -5469544147542759613, guid: c89048461ca41e246970d0bd69a7ec57, type: 3}
   _pieceL: {fileID: -7512434501291994743, guid: c89048461ca41e246970d0bd69a7ec57, type: 3}
-  _colorPiece1P: {r: 1, g: 0.0627451, b: 0, a: 1}
-  _colorPiece2P: {r: 0, g: 0.22745098, b: 1, a: 1}
+  _colorPiece1P: {r: 1, g: 0.3766371, b: 0.33490568, a: 1}
+  _colorPiece2P: {r: 0.2688679, g: 0.43516487, b: 1, a: 1}
   _tilePlaced: {fileID: 7713819393718715255, guid: 26d2b8d82fccf954d97a6d9791fa0978, type: 3}
   _tileEmpty: {fileID: 7399533318584292489, guid: 26d2b8d82fccf954d97a6d9791fa0978, type: 3}
   _colorTile1P: {r: 1, g: 0.7175205, b: 0.7028302, a: 1}
   _colorTile2P: {r: 0.8160377, g: 0.8773522, b: 1, a: 1}
+  _colorUI1P: {r: 1, g: 0.627451, b: 0.627451, a: 1}
+  _colorUI2P: {r: 0.627451, g: 0.7019608, b: 1, a: 1}
