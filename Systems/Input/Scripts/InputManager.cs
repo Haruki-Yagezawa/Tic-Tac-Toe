@@ -8,6 +8,7 @@ namespace InputSystems
     {
 
         [HideInInspector] public event Action OnPushAnyKeyEvent;
+        [HideInInspector] public event Action OnPushEscapeEvent;
         [HideInInspector] public event Action OnPush1PLeftEvent;
         [HideInInspector] public event Action OnPush1PRightEvent;
         [HideInInspector] public event Action OnPush1PUpEvent;
@@ -35,6 +36,7 @@ namespace InputSystems
         private void OnSubscribe()
         {
             InputSystem.actions["AnyKey"].performed += OnPushAnyKey;
+            InputSystem.actions["Escape"].performed += OnPushEscape;
             InputSystem.actions["1PLeft"].performed += OnPush1PLeft;
             InputSystem.actions["1PRight"].performed += OnPush1PRight;
             InputSystem.actions["1PUp"].performed += OnPush1PUp;
@@ -53,6 +55,7 @@ namespace InputSystems
         private void onDispose()
         {
             InputSystem.actions["AnyKey"].performed -= OnPushAnyKey;
+            InputSystem.actions["Escape"].performed -= OnPushEscape;
             InputSystem.actions["1PLeft"].performed -= OnPush1PLeft;
             InputSystem.actions["1PRight"].performed -= OnPush1PRight;
             InputSystem.actions["1PUp"].performed -= OnPush1PUp;
@@ -74,6 +77,11 @@ namespace InputSystems
         private void OnPushAnyKey(InputAction.CallbackContext context)
         {
             OnPushAnyKeyEvent?.Invoke();
+        }
+        
+        private void OnPushEscape(InputAction.CallbackContext context)
+        {
+            OnPushEscapeEvent?.Invoke();
         }
 
         private void OnPush1PLeft(InputAction.CallbackContext context)

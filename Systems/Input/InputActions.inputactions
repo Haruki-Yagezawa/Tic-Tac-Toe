@@ -16,6 +16,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "0d4887c0-6925-4cc7-854e-51fa7b534c7f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "1PLeft",
                     "type": "Button",
                     "id": "1005d4c9-eb54-4d01-9ade-b4cd3cf7a595",
@@ -463,6 +472,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "2PPieceTypeChange",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "38ad81dd-8429-43a9-9f6f-636fe1f9c088",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Escape",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
