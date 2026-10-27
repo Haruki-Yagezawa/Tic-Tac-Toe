@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using GameManager;
 using R3;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace BoardSurface

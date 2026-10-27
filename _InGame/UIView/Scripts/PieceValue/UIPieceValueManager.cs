@@ -12,7 +12,7 @@ namespace UI
     [System.Serializable]
     public class UIPieceValueManager
     {
-        private const float SHAKE_POWER_LABEL = 1.5f;
+        private const float SHAKE_POWER_LABEL = 13f;
         private const float MOVE_TIME_RABEL = 0.5f;
 
         [SerializeField]

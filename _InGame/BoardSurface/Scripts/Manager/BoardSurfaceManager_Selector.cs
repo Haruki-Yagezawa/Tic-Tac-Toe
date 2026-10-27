@@ -2,7 +2,6 @@ using BoardSurface.CurrentTileData;
 using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 namespace BoardSurface
 {
