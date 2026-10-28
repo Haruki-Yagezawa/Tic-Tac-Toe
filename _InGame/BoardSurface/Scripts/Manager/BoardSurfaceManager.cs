@@ -87,6 +87,9 @@ namespace BoardSurface
             _selector.OnMoveTileEvent -= _view.OnMoveTile;
             _selector.OnSelectTileEvent -= _view.OnSelectTile;
             _selector.OnChangePieceTypeEvent -= _view.OnChangePieceType;
+            _selector.OnMissChoice_NotHaveEvent -= OnMissChoice_NotHave;
+            _selector.OnMissChoice_AllocatedEvent -= _view.OnMissChoice_Allocated;
+            _selector.OnMissChoice_LowRankEvent -= _view.OnMissChoice_LowRank;
         }
 
         //===============================================================================
