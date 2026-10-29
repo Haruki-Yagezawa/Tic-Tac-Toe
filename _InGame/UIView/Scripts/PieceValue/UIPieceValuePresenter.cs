@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class UIPieceValuePlesenter : MonoBehaviour
+    public class UIPieceValuePresenter : MonoBehaviour
     {
         [SerializeField]
         private UIPieceValueManager _manager;
